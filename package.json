@@ -1,0 +1,50 @@
+{
+  "name": "bestpracticesnode",
+  "version": "0.0.1",
+  "description": "Best practices example to create an awesome API with Node js  ",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run build && node ./dist/app.js",
+    "build": "tsc",
+    "lint": "tslint src/**/*",
+    "watch": "tsc --watch",
+    "serve": "nodemon ./dist/app.js",
+    "test": "echo 'Error, testing not found' "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Artificial-Human/best-practices-api-rest-node.git"
+  },
+  "keywords": [
+    "best",
+    "practices",
+    "node",
+    "api",
+    "express",
+    "tdd"
+  ],
+  "author": "Leonardo Velarde (@aguacatevelarde)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Artificial-Human/best-practices-api-rest-node/issues"
+  },
+  "homepage": "https://github.com/Artificial-Human/best-practices-api-rest-node#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "typescript": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.24",
+    "@types/chai": "^4.1.7",
+    "@types/express": "^4.16.0",
+    "@types/mocha": "^5.2.6",
+    "@types/mongoose": "^5.3.27",
+    "@types/supertest": "^2.0.7",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "mongodb-memory-server": "^5.1.0",
+    "supertest": "^4.0.2",
+    "ts-node": "^8.1.0",
+    "tslint": "^5.16.0"
+  }
+}
