@@ -1,12 +1,29 @@
 {
   "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "es2018",
     "module": "commonjs",
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "types": [
+      "reflect-metadata"
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "@models": ["models/index.ts"],
+      "@models/*": ["models/*"],
+      "@decorators": ["decorators"],
+      "@decorators/*": ["decorators/*"],
+      "@api/*": ["api/*"],
+      "@shared/*": ["shared/*"],
+      "@domain/*": ["domain/*"],
+      "@types" : ["../types.ts"]
+    }
   },
   "include": [
       "src/**/*"
