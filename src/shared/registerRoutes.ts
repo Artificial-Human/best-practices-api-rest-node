@@ -1,8 +1,8 @@
-import { RouteDefinition } from "@models/RouteDefinition";
-import { Http } from "@status/codes";
-import express, { NextFunction, RequestHandler, Response, Request, RouterOptions, Router } from 'express'
-import { PathParams, RequestHandlerParams } from "express-serve-static-core";
-import BaseError from "./baseError";
+import { RouteDefinition } from '@models/RouteDefinition';
+import { Http } from '@status/codes';
+import express, { NextFunction, Request, RequestHandler, Response, Router, RouterOptions } from 'express';
+import { PathParams, RequestHandlerParams } from 'express-serve-static-core';
+import BaseError from './baseError';
 
 const buildRouter = (options?: RouterOptions): Router => {
   const router = Router({ ...options, mergeParams: true });
@@ -15,7 +15,7 @@ const buildRouter = (options?: RouterOptions): Router => {
   const deleteMethod = router.delete;
 
   // @ts-ignore
-  router['use'] = function(
+  router.use = function(
     path: PathParams,
     ...handlers: RequestHandler[] | RequestHandlerParams[]
   ) {
@@ -23,7 +23,7 @@ const buildRouter = (options?: RouterOptions): Router => {
     return useMethod.call(router, path, wrap(...handlers));
   };
 
-  router['get'] = function(
+  router.get = function(
     path: PathParams,
     ...handlers: RequestHandler[] | RequestHandlerParams[]
   ) {
@@ -31,7 +31,7 @@ const buildRouter = (options?: RouterOptions): Router => {
     return getMethod.call(router, path, wrap(...handlers));
   };
 
-  router['post'] = function(
+  router.post = function(
     path: PathParams,
     ...handlers: RequestHandler[] | RequestHandlerParams[]
   ) {
@@ -39,7 +39,7 @@ const buildRouter = (options?: RouterOptions): Router => {
     return postMethod.call(router, path, wrap(...handlers));
   };
 
-  router['put'] = function(
+  router.put = function(
     path: PathParams,
     ...handlers: RequestHandler[] | RequestHandlerParams[]
   ) {
@@ -47,7 +47,7 @@ const buildRouter = (options?: RouterOptions): Router => {
     return putMethod.call(router, path, wrap(...handlers));
   };
 
-  router['patch'] = function(
+  router.patch = function(
     path: PathParams,
     ...handlers: RequestHandler[] | RequestHandlerParams[]
   ) {
@@ -55,7 +55,7 @@ const buildRouter = (options?: RouterOptions): Router => {
     return patchMethod.call(router, path, wrap(...handlers));
   };
 
-  router['delete'] = function(
+  router.delete = function(
     path: PathParams,
     ...handlers: RequestHandler[] | RequestHandlerParams[]
   ) {
@@ -66,32 +66,31 @@ const buildRouter = (options?: RouterOptions): Router => {
   return router;
 };
 
-
-export const register = (app: express.Express, controllers: Array<any>) => {  
-  const router = buildRouter()
-  controllers.forEach((controller: any) => {   
+export const register = (app: express.Express, controllers: any[]) => {
+  const router = buildRouter();
+  controllers.forEach((controller: any) => {
     const instance = new controller();
     const prefix                         = Reflect.getMetadata('prefix', controller);
-    const routes: Array<RouteDefinition> = Reflect.getMetadata('routes', controller);
-    routes.forEach(route => {    
-      const callback: RequestHandler = async (req: express.Request, res: Response, next: NextFunction) => {        
+    const routes: RouteDefinition[] = Reflect.getMetadata('routes', controller);
+    routes.forEach((route) => {
+      const callback: RequestHandler = async (req: express.Request, res: Response, next: NextFunction) => {
         try {
           await instance[route.methodName](req, res);
         } catch (error) {
           handleError(error, res);
         }
-      } 
+      };
       return router[route.requestMethod](prefix + route.path, callback );
-    });   
+    });
   });
 
-  app.use(router)
+  app.use(router);
 
   app.use((err: Error, _: any, res: Response, next: NextFunction) => {
-    console.log("Error handler");
+    console.log('Error handler');
     handleError(err, res);
   });
-}
+};
 
 const handleError = (err: Error, res: Response) => {
   if ((err as BaseError).status) {
@@ -113,13 +112,12 @@ const handleError = (err: Error, res: Response) => {
     .send({ code: Http.InternalServerError, error: err.message });
 };
 
-
-let wrap = (...handlers: any[]) => async (req: Request, res: Response, next: NextFunction) => {
+const wrap = (...handlers: any[]) => async (req: Request, res: Response, next: NextFunction) => {
   for (let i = 0; i < handlers.length; i += 1) {
     try {
-      await handlers[i](req, res, next)
-    } catch (error) {      
-      next(error)
+      await handlers[i](req, res, next);
+    } catch (error) {
+      next(error);
     }
   }
-}
+};

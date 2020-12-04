@@ -1,31 +1,31 @@
-import CreateUserDTO from "@api/user/createDTO";
-import { injectable } from "inversify";
+import CreateUserDTO from '@api/user/createDTO';
+import { injectable } from 'inversify';
 
 interface IUser {
-  first_name: string, 
-  email: string 
+  first_name: string;
+  email: string;
 }
 
 @injectable()
-export default class UserEntity{
-  private user : IUser = {
+export default class UserEntity {
+  private user: IUser = {
     first_name: null,
     email: null
-  }
+  };
 
-  createUser(user: CreateUserDTO) {
+  public createUser(user: CreateUserDTO) {
     this.user = {
       first_name: user.name,
       email: user.email
-    }
-    return this
+    };
+    return this;
   }
-  
-  getName() {
+
+  public getName() {
     return this.user.first_name;
   }
 
-  getNameAndMail() {
+  public getNameAndMail() {
     return this.user;
   }
 

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express'
+import { plainToClass } from 'class-transformer';
+import { Http } from '@status/codes';
 import { Controller, Post, lazyInject, ValidateBody } from '@decorators';
 import { TYPES } from '../../types';
 import UserEntity from '@domain/user.entity';
 import CreateUserDTO from './createDTO';
-import { plainToClass } from 'class-transformer';
-import { Http } from '@status/codes';
 
 
 @Controller('/api/user')
